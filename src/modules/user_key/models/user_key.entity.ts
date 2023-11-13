@@ -1,7 +1,8 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Index } from 'typeorm';
 
 @Entity('PortalUserKey')
+@Index(["accessKey", "secretKey"], { unique: true })
 export class UserKey {
   @PrimaryGeneratedColumn()
   id: number;
