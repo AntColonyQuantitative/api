@@ -1,10 +1,13 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
 import { CreateUserInput } from './dto/new-user.input';
 import { UserType } from './dto/user.type';
 import { UserService } from './user.service';
 import { UpdateUserInput } from './dto/update-user.input';
+import { GqlAuthGuard } from '@/common/guards/auth.guard';
 
 @Resolver()
+@UseGuards(GqlAuthGuard)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
@@ -20,6 +23,12 @@ export class UserResolver {
 
   @Query(() => UserType, { description: 'Find user by id' })
   async getUserById(@Args('id') id: string): Promise<UserType> {
+    return await this.userService.find(id);
+  }
+
+  @Query(() => UserType, { description: 'Find user by context' })
+  async getUserInfo(@Context() cxt: any): Promise<UserType> {
+    const id = cxt.req.user.id;
     return await this.userService.find(id);
   }
 
