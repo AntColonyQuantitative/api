@@ -12,7 +12,10 @@ export class UserService {
 
   // create an user
   async create(entity: DeepPartial<User>): Promise<boolean> {
-    const res = await this.UserRepository.insert(entity);
+    const res = await this.UserRepository.insert({
+      ...entity,
+      createdAt: new Date(),
+    });
     if (res && res.raw.length > 0) {
       return true;
     }

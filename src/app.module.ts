@@ -16,6 +16,7 @@ import { UserKeyModule } from './modules/user_key/user_key.module';
 import { StrategyModule } from './modules/strategy/strategy.module';
 // Import the config loading function, for loading settings from environment variables or configuration files
 import getConfig from './config';
+import { AuthModule } from './modules/auth/auth.module';
 
 // Use the @Module decorator to define the main module of the application
 @Module({
@@ -42,8 +43,9 @@ import getConfig from './config';
     }),
     // Import the User module
     UserModule,
+    AuthModule,
     UserKeyModule,
-    StrategyModule
+    StrategyModule,
   ],
   // List all controllers
   controllers: [AppController],

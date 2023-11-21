@@ -91,6 +91,12 @@ export class User {
   isDeleted: boolean;
 
   @Column({
+    comment: 'Create date of user',
+    nullable: true,
+  })
+  createdAt: Date;
+
+  @Column({
     comment: 'Verification code',
     nullable: true,
   })
