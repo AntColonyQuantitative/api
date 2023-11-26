@@ -1,5 +1,7 @@
 // Import the NestJS core decorator Module for defining a module
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+
 // Import the NestJS TypeORM module for database ORM integration
 import { TypeOrmModule } from '@nestjs/typeorm';
 // Import the NestJS GraphQL module for GraphQL API integration
@@ -14,6 +16,7 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { UserKeyModule } from './modules/user_key/user_key.module';
 import { StrategyModule } from './modules/strategy/strategy.module';
+import { PriceHistoryModule } from './modules/price_history/price_history.module';
 // Import the config loading function, for loading settings from environment variables or configuration files
 import getConfig from './config';
 import { AuthModule } from './modules/auth/auth.module';
@@ -36,6 +39,7 @@ import { AuthModule } from './modules/auth/auth.module';
       subscribers: [], // Configure subscribers, typically used for listening to database events
       migrations: [], // Configure database migration files
     }),
+    ScheduleModule.forRoot(),
     // Configure GraphQL using the GraphQLModule
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver, // Set to use Apollo as the GraphQL service driver
@@ -46,6 +50,7 @@ import { AuthModule } from './modules/auth/auth.module';
     AuthModule,
     UserKeyModule,
     StrategyModule,
+    PriceHistoryModule
   ],
   // List all controllers
   controllers: [AppController],
