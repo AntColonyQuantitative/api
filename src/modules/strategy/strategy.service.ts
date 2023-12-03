@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, Repository, Between } from 'typeorm';
 import { Strategy } from './models/strategy.entity';
 import * as ccxt from 'ccxt';
 
@@ -77,6 +77,22 @@ export class StrategyService {
     return false;
   }
 
+  async updateStrategyStatistics(strategy: Strategy, transactionResult) : Promise<Strategy>{
+    //Check if the order status is' closed '(completed), and only update statistics in this case
+    if (transactionResult.status === 'closed') {
+      //Update policy statistics data
+      strategy.buyTimes += 1; // Increase the number of purchases
+      strategy.baseTotal += transactionResult.amount; // Increase the total purchase amount
+      strategy.quoteTotal += transactionResult.cost; // Increase total expenses
+      // 
+      // Assuming you need to calculate profits, it will depend on your specific business logic
+      // strategy.profit = ...;
+      return await this.StrategyRepository.save(strategy);
+    } else {
+      console.log(`Order ${transactionResult.id} is not closed. Statistics not updated.`);
+    }
+  }
+
   // get all strategys
   async findAll(): Promise<Strategy[]> {
     // TODO Add deletion status filtering
@@ -94,4 +110,28 @@ export class StrategyService {
     });
     return res;
   }
+
+  //
+  async getStrategiesForTime() {
+    const specificTime = new Date('2023-11-30T15:00:00Z');
+    const strategies = await this.getStrategiesForCurrentHour(specificTime);
+    return strategies;
+  }
+
+  // get all current strategies that need to be executed
+  async getStrategiesForCurrentHour(startTime?: Date): Promise<Strategy[]> {
+    let startHour = startTime || new Date();
+    startHour.setMinutes(0, 0, 0); // Set to start at the specified hour
+
+    let endHour = new Date(startHour);
+    endHour.setHours(startHour.getHours() + 1); // Set as the start of the next hour
+
+    return this.StrategyRepository.find({
+      where: {
+        nextExecuteTime: Between(startHour, endHour),
+        status: 'Active'
+      },
+    });
+  }
+
 }

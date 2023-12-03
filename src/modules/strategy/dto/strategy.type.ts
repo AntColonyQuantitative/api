@@ -27,7 +27,7 @@ export class StrategyType {
   minute: number;
 
   @Field(type => Date, { description: 'Next transaction time' })
-  nextTransactionTime: Date;
+  nextExecuteTime: Date;
 
   @Field({ description: 'The ID of the market key set by the user' })
   userKeyID: string;

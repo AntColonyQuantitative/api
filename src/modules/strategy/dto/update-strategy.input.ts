@@ -18,7 +18,7 @@ export class UpdateStrategyInput {
   minute?: number;
 
   @Field({ description: 'Next transaction time' })
-  nextTransactionTime: Date;
+  nextExecuteTime: Date;
 
   // @Field({ nullable: true, description: 'The ID of the market key set by the user' })
   // userKeyID?: string;

@@ -19,7 +19,7 @@ export class CreateStrategyInput {
 
   // Calculate based on user set cycles
   // @Field(type => Date, { description: 'Next transaction time' })
-  // nextTransactionTime: Date;
+  // nextExecuteTime: Date;
 
   @Field({ description: 'The ID of the market key set by the user' })
   userKeyID: string;

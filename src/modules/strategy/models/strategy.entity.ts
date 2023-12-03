@@ -46,7 +46,7 @@ export class Strategy {
 
   @Column({ comment: 'Next transaction time' })
   @IsNotEmpty()
-  nextTransactionTime: Date;
+  nextExecuteTime: Date;
 
   @Column({ comment: 'Symbol' })
   @IsNotEmpty()
